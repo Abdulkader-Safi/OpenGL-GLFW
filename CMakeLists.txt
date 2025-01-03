@@ -23,7 +23,7 @@ include_directories(
 # ---------------------------------------------------------
 # Copy shader files to the build directory
 # ---------------------------------------------------------
-file(COPY shaders/ DESTINATION ${CMAKE_BINARY_DIR}/shaders)
+# file(COPY shaders/ DESTINATION ${CMAKE_BINARY_DIR}/shaders)
 
 # ---------------------------------------------------------
 # GLAD Configuration
