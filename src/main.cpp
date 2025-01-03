@@ -74,7 +74,7 @@ int main()
   glCompileShader(fragmentShader);
 
   // Link the Vertex and Fragment shader into a shader program
-  GLuint shaderProgram;
+  GLuint shaderProgram = glCreateProgram();
   glAttachShader(shaderProgram, vertexShader);
   glAttachShader(shaderProgram, fragmentShader);
   glLinkProgram(shaderProgram);
