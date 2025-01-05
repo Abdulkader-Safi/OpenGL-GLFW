@@ -10,20 +10,27 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # ---------------------------------------------------------
 # Add executable target
 # ---------------------------------------------------------
-add_executable(main src/main.cpp)
+add_executable(main
+  src/main.cpp
+  src/ShaderClass.cpp
+  src/VAO.cpp
+  src/VBO.cpp
+  src/EBO.cpp
+)
 
 # ---------------------------------------------------------
 # Include Directories
 # ---------------------------------------------------------
 include_directories(
   ${CMAKE_SOURCE_DIR}/include # Include local headers
-  lib/glad/include # GLAD headers
+  ${CMAKE_SOURCE_DIR}/shaders # Include local shaders
+  ${CMAKE_SOURCE_DIR}/lib/glad/include # GLAD headers
 )
 
 # ---------------------------------------------------------
 # Copy shader files to the build directory
 # ---------------------------------------------------------
-# file(COPY shaders/ DESTINATION ${CMAKE_BINARY_DIR}/shaders)
+file(COPY ${CMAKE_SOURCE_DIR}/shaders/ DESTINATION ${CMAKE_BINARY_DIR}/shaders)
 
 # ---------------------------------------------------------
 # GLAD Configuration
