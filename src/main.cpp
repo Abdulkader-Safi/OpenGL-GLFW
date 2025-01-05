@@ -64,7 +64,7 @@ int main()
   // Call it once to set the viewport to the correct size
 
   // Generates Shader object using shaders default.vert and default.frag
-  Shader shaderProgram("shaders/default.vert", "shaders/default.frag");
+  Shader shaderProgram("res/shaders/default.vert", "res/shaders/default.frag");
 
   // Generates Vertex Array Object and binds it
   VAO VAO1;
@@ -84,6 +84,10 @@ int main()
   EBO1.Unbind();
 
   GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
+
+  // Texture
+  int widthImg, heightImg, numColCh;
+  unsigned char *data = stbi_load("res/images/img1.jpg", &widthImg, &heightImg, &numColCh, 0);
 
   // Main while loop
   while (!glfwWindowShouldClose(window))

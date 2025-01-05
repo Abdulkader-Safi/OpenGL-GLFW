@@ -31,7 +31,12 @@ include_directories(
 # ---------------------------------------------------------
 # Copy shader files to the build directory
 # ---------------------------------------------------------
-file(COPY ${CMAKE_SOURCE_DIR}/shaders/ DESTINATION ${CMAKE_BINARY_DIR}/shaders)
+file(COPY ${CMAKE_SOURCE_DIR}/res/shaders/ DESTINATION ${CMAKE_BINARY_DIR}/res/shaders)
+
+# ---------------------------------------------------------
+# Copy image files to the build directory
+# ---------------------------------------------------------
+file(COPY ${CMAKE_SOURCE_DIR}/res/images/ DESTINATION ${CMAKE_BINARY_DIR}/res/images)
 
 # ---------------------------------------------------------
 # GLAD Configuration
