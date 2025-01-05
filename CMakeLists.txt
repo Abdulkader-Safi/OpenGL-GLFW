@@ -25,6 +25,7 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/include # Include local headers
   ${CMAKE_SOURCE_DIR}/shaders # Include local shaders
   ${CMAKE_SOURCE_DIR}/lib/glad/include # GLAD headers
+  ${CMAKE_SOURCE_DIR}/lib/stb # Include stb_image headers
 )
 
 # ---------------------------------------------------------
