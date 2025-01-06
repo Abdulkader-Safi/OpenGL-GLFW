@@ -12,7 +12,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # ---------------------------------------------------------
 add_executable(main
   src/main.cpp
+
   src/ShaderClass.cpp
+  src/Texture.cpp
+
   src/VAO.cpp
   src/VBO.cpp
   src/EBO.cpp

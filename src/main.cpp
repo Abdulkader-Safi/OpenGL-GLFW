@@ -1,14 +1,12 @@
-#define STB_IMAGE_IMPLEMENTATION
-
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <stb_image.h>
 
 #include "shaderClass.h"
 #include "VAO.h"
 #include "VBO.h"
 #include "EBO.h"
+#include "Texture.h"
 
 void processInput(GLFWwindow *window);
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
@@ -63,8 +61,6 @@ int main()
   // Set the callback for when the window resizes
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-  // Call it once to set the viewport to the correct size
-
   // Generates Shader object using shaders default.vert and default.frag
   Shader shaderProgram("res/shaders/default.vert", "res/shaders/default.frag");
 
@@ -89,32 +85,8 @@ int main()
   GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
   // Texture
-  int widthImg, heightImg, numColCh;
-  unsigned char *bytes = stbi_load("res/images/img1.jpg", &widthImg, &heightImg, &numColCh, 0);
-
-  GLuint texture;
-  glGenTextures(1, &texture);
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, texture);
-
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-  // float flatColor[] = {0.0f, 0.0f, 0.0f, 1.0f};
-  // glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, flatColor);
-
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, widthImg, heightImg, 0, GL_RGB, GL_UNSIGNED_BYTE, bytes);
-  glGenerateMipmap(GL_TEXTURE_2D);
-
-  stbi_image_free(bytes);
-  glBindTexture(GL_TEXTURE_2D, 0);
-
-  GLuint tex0Uni = glGetUniformLocation(shaderProgram.ID, "tex0");
-  shaderProgram.Activate();
-  glUniform1i(tex0Uni, 0);
+  Texture flower("res/images/img1.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+  flower.texUnit(shaderProgram, "tex0", 0);
 
   // Main while loop
   while (!glfwWindowShouldClose(window))
@@ -130,7 +102,7 @@ int main()
     shaderProgram.Activate();
 
     glUniform1f(uniID, 0.5f);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    flower.Bind();
 
     // Bind the VAO so OpenGL knows to use it
     VAO1.Bind();
@@ -147,7 +119,7 @@ int main()
   VAO1.Delete();
   VBO1.Delete();
   EBO1.Delete();
-  glDeleteTextures(1, &texture);
+  flower.Delete();
   shaderProgram.Delete();
   // Delete window before ending the program
   glfwDestroyWindow(window);
