@@ -7,6 +7,7 @@
 #include "VBO.h"
 #include "EBO.h"
 #include "Texture.h"
+#include <stb_image.h>
 
 void processInput(GLFWwindow *window);
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
