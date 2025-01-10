@@ -5,7 +5,7 @@ project(OpenGLProject VERSION 1.0)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # ---------------------------------------------------------
 # Add executable target
@@ -14,6 +14,7 @@ add_executable(main
   src/main.cpp
 
   src/ShaderClass.cpp
+
   src/Texture.cpp
 
   src/VAO.cpp
@@ -24,21 +25,29 @@ add_executable(main
 # ---------------------------------------------------------
 # Include Directories
 # ---------------------------------------------------------
-include_directories(
-  ${CMAKE_SOURCE_DIR}/include # Include local headers
-  ${CMAKE_SOURCE_DIR}/shaders # Include local shaders
+target_include_directories(main PRIVATE
+  ${CMAKE_SOURCE_DIR}/include # Local headers
+  ${CMAKE_SOURCE_DIR}/shaders # Local shaders
   ${CMAKE_SOURCE_DIR}/lib/glad/include # GLAD headers
-  ${CMAKE_SOURCE_DIR}/lib/stb # Include stb_image headers
+  ${CMAKE_SOURCE_DIR}/lib/stb # stb_image headers
 )
 
 # ---------------------------------------------------------
-# Copy shader files to the build directory
+# GLM Configuration (Using Homebrew)
 # ---------------------------------------------------------
-file(COPY ${CMAKE_SOURCE_DIR}/res/shaders/ DESTINATION ${CMAKE_BINARY_DIR}/res/shaders)
+find_path(GLM_INCLUDE_DIR glm/glm.hpp PATHS /opt/homebrew/include /usr/local/include)
+
+if(GLM_INCLUDE_DIR)
+  message(STATUS "Found GLM at ${GLM_INCLUDE_DIR}")
+  target_include_directories(main PRIVATE ${GLM_INCLUDE_DIR})
+else()
+  message(FATAL_ERROR "GLM not found. Install it via Homebrew using 'brew install glm'.")
+endif()
 
 # ---------------------------------------------------------
-# Copy image files to the build directory
+# Copy Resource Files
 # ---------------------------------------------------------
+file(COPY ${CMAKE_SOURCE_DIR}/res/shaders/ DESTINATION ${CMAKE_BINARY_DIR}/res/shaders)
 file(COPY ${CMAKE_SOURCE_DIR}/res/images/ DESTINATION ${CMAKE_BINARY_DIR}/res/images)
 
 # ---------------------------------------------------------
@@ -49,14 +58,18 @@ target_include_directories(glad PUBLIC lib/glad/include)
 target_link_libraries(main PRIVATE glad)
 
 # ---------------------------------------------------------
-# Find and Link GLFW
+# GLFW Configuration
 # ---------------------------------------------------------
 find_package(PkgConfig REQUIRED)
 pkg_search_module(GLFW REQUIRED glfw3)
 
-include_directories(${GLFW_INCLUDE_DIRS})
-link_directories(${GLFW_LIBRARY_DIRS})
-target_link_libraries(main PRIVATE ${GLFW_LIBRARIES})
+if(GLFW_FOUND)
+  message(STATUS "Found GLFW: ${GLFW_LIBRARIES}")
+  target_include_directories(main PRIVATE ${GLFW_INCLUDE_DIRS})
+  target_link_libraries(main PRIVATE ${GLFW_LIBRARIES})
+else()
+  message(FATAL_ERROR "GLFW not found. Install it via Homebrew using 'brew install glfw'.")
+endif()
 
 # ---------------------------------------------------------
 # Link OpenGL (macOS)

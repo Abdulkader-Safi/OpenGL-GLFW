@@ -9,9 +9,13 @@ out vec2 texCoord;
 
 uniform float scale;
 
+uniform float model;
+uniform float view;
+uniform float proj;
+
 void main()
 {
-  gl_Position=vec4(aPos.x+aPos.x*scale,aPos.y+aPos.y*scale,aPos.z+aPos.z*scale,1.);
+  gl_Position=gl_Position=proj*view*model*vec4(aPos,1.);
   color=aColor;
   texCoord=aTex;
 }
